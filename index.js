@@ -22,10 +22,14 @@ async function run() {
 
     //   get data
     app.get('/services', async (req, res) => {
+      const page = parseInt(req.query.page) ;
+      const size =parseInt(req.query.size) ;
+      console.log(page, size)
       const query = {};
       const service = ServiceCollection.find(query);
-      const newservice = await service.toArray();
-      res.send(newservice);
+      const newService = await service.skip(page*size).limit(size).toArray();
+      const count  = await ServiceCollection.estimatedDocumentCount();
+      res.send({count,newService});
     })
 
     // get data by id
