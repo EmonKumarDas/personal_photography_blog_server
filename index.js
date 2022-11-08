@@ -28,9 +28,18 @@ async function run() {
       res.send(newservice);
     })
 
+    // get data by id
+    app.get('/services/:id', async (req, res) => {
+      const query = {};
+      const service = ServiceCollection.find(query);
+      const newservice = await service.toArray();
+      const findServiceById = newservice.find(getService=>getService._id==req.params.id)
+      res.send(findServiceById);
+    })
+
   }
 
-  finally { }
+  finally {}
 }
 run().catch();
 
