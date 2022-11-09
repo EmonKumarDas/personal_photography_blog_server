@@ -19,31 +19,41 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
   try {
     const ServiceCollection = client.db("photographyBlog").collection("service");
+    const CommentCollection = client.db("photographyBlog").collection("comments");
 
     //   get data
     app.get('/services', async (req, res) => {
-      const page = parseInt(req.query.page) ;
-      const size =parseInt(req.query.size) ;
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
       console.log(page, size)
       const query = {};
       const service = ServiceCollection.find(query);
-      const newService = await service.skip(page*size).limit(size).toArray();
-      const count  = await ServiceCollection.estimatedDocumentCount();
-      res.send({count,newService});
+      const newService = await service.skip(page * size).limit(size).toArray();
+      const count = await ServiceCollection.estimatedDocumentCount();
+      res.send({ count, newService });
     })
+
 
     // get data by id
     app.get('/services/:id', async (req, res) => {
       const query = {};
       const service = ServiceCollection.find(query);
       const newservice = await service.toArray();
-      const findServiceById = newservice.find(getService=>getService._id==req.params.id)
+      const findServiceById = newservice.find(getService => getService._id == req.params.id)
       res.send(findServiceById);
+    })
+
+
+    // send data to database
+    app.post('/comments', async (req, res) => {
+      const comment = req.body;
+      const comments = await CommentCollection.insertOne(comment);
+      res.send(comments);
     })
 
   }
 
-  finally {}
+  finally { }
 }
 run().catch();
 
