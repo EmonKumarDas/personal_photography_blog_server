@@ -53,20 +53,21 @@ async function run() {
 
 
     // get data from database
-    app.get('/comments', async(req, res) => {
+    app.get('/comments', async (req, res) => {
       const comment = CommentCollection.find({});
       const getComments = await comment.toArray();
       res.send(getComments);
     })
 
     // get comment by id
-    app.get('/comments/:id', async(req, res) => {
+    app.get('/comments/:id', async (req, res) => {
       const comment = CommentCollection.find({});
       const comments = await comment.toArray();
-      const findComment = comments.find(newcomment=> newcomment.cateId==req.params.id);
+      const findComment = comments.filter(newcomment => newcomment.cateId === req.params.id);
       res.send(findComment);
 
     })
+
 
   }
 
