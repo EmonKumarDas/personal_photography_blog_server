@@ -21,6 +21,7 @@ async function run() {
     const ServiceCollection = client.db("photographyBlog").collection("service");
     const CommentCollection = client.db("photographyBlog").collection("comments");
 
+
     //   get data
     app.get('/services', async (req, res) => {
       const page = parseInt(req.query.page);
@@ -51,13 +52,6 @@ async function run() {
     })
 
 
-    // // get comments data from database
-    // app.get('/comments', async (req, res) => {
-    //   const comment = CommentCollection.find({});
-    //   const getComments = await comment.toArray();
-    //   res.send(getComments);
-    // })
-
     // get comment by id
     app.get('/comments/:id', async (req, res) => {
       const comment = CommentCollection.find({});
@@ -70,14 +64,21 @@ async function run() {
     // get data by email
     app.get('/comments', async (req, res) => {
       let query = {};
-     if(req.query.email){
-      query={
-        email:req.query.email,
+      if (req.query.email) {
+        query = {
+          email: req.query.email,
+        }
       }
-     }
       const comment = CommentCollection.find(query);
       const getComments = await comment.toArray();
       res.send(getComments);
+    })
+
+    // get data for add service
+    app.post('/ServiceCollection', async (req, res) => {
+      const addservices = req.body;
+      const addservice = await ServiceCollection.insertOne(addservices);
+      res.send(addservice);
     })
 
 
