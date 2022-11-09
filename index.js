@@ -59,6 +59,14 @@ async function run() {
       res.send(getComments);
     })
 
+    // get comment by id
+    app.get('/comments/:id', async(req, res) => {
+      const comment = CommentCollection.find({});
+      const comments = await comment.toArray();
+      const findComment = comments.find(newcomment=> newcomment.cateId==req.params.id);
+      res.send(findComment);
+
+    })
 
   }
 
