@@ -51,6 +51,15 @@ async function run() {
       res.send(comments);
     })
 
+
+    // get data from database
+    app.get('/comments', async(req, res) => {
+      const comment = CommentCollection.find({});
+      const getComments = await comment.toArray();
+      res.send(getComments);
+    })
+
+
   }
 
   finally { }
