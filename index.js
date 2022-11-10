@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const port = 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 require('dotenv').config();
 
@@ -81,6 +81,15 @@ async function run() {
       res.send(addservice);
     })
 
+    // delete comment 
+    app.delete('/commentsDelete/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id:ObjectId(id)}
+      const result = await CommentCollection.deleteOne(query);
+      res.send(result)
+    })
+
+    
 
   }
 
