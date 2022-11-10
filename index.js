@@ -96,7 +96,7 @@ async function run() {
           email: req.query.email,
         }
       }
-      const comment = CommentCollection.find(query);
+      const comment = CommentCollection.find(query,{time:1,_id:0}).sort({"time":-1});
       const getComments = await comment.toArray();
       res.send(getComments);
     })
