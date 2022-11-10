@@ -82,14 +82,37 @@ async function run() {
     })
 
     // delete comment 
-    app.delete('/commentsDelete/:id',async(req,res)=>{
+    app.delete('/commentsDelete/:id', async (req, res) => {
       const id = req.params.id;
-      const query = {_id:ObjectId(id)}
+      const query = { _id: ObjectId(id) }
       const result = await CommentCollection.deleteOne(query);
       res.send(result)
     })
 
+        // get comment by _id for editing
+        app.get('/editcomment/:id', async (req, res) => {
+          const comment = CommentCollection.find({});
+          const comments = await comment.toArray();
+          const findComment = comments.find(newcomment => newcomment._id == req.params.id);
+          res.send(findComment);
     
+        })
+
+    // Edit Comments
+
+    app.put('/commentsEdit/:id',async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id:ObjectId(id)}
+      const comments = req.body;
+      const option = {upset:true}
+      const updateComments = {
+          $set:{ 
+            NewMessage: comments.NewMessage
+          }
+      }
+      const result = await CommentCollection.updateOne(filter,updateComments,option)
+      res.send(result)
+  })
 
   }
 
